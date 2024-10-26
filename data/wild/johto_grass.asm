@@ -305,9 +305,9 @@ JohtoGrassWildMons:
 	db 14, KOFFING
 	db 15, RATTATA
 	db 14, ZUBAT
-	db 15, RATTATA
-	db 15, RATICATE
-	db 15, RATICATE
+	db 15, HOUNDOUR
+	db 15, HOUNDOUR
+	db 15, HOUNDOUR
 	end_grass_wildmons
 
 	def_grass_wildmons BURNED_TOWER_B1F
@@ -333,9 +333,9 @@ JohtoGrassWildMons:
 	db 14, KOFFING
 	db 16, KOFFING
 	db 15, ZUBAT
-	db 12, KOFFING
-	db 16, KOFFING
-	db 16, WEEZING
+	db 12, MISDREAVUS
+	db 16, MISDREAVUS
+	db 16, MISDREAVUS
 	end_grass_wildmons
 
 	def_grass_wildmons NATIONAL_PARK
@@ -389,9 +389,9 @@ JohtoGrassWildMons:
 	db 22, NATU
 	db 18, NATU
 	db 24, NATU
-	db 22, WOOPER
-	db 22, QUAGSIRE
-	db 22, QUAGSIRE
+	db 22, KABUTO
+	db 22, KABUTO
+	db 22, KABUTO
 	end_grass_wildmons
 
 	def_grass_wildmons RUINS_OF_ALPH_INNER_CHAMBER
@@ -586,8 +586,8 @@ JohtoGrassWildMons:
 	db 7, ODDISH
 	db 7, PSYDUCK
 	db 7, HOOTHOOT
-	db 6, PARAS
-	db 6, PARAS
+	db 6, MURKROW
+	db 6, MURKROW
 	end_grass_wildmons
 
 	def_grass_wildmons MOUNT_MORTAR_1F_OUTSIDE
@@ -1215,7 +1215,7 @@ JohtoGrassWildMons:
 	db 25, URSARING
 	db 20, TEDDIURSA
 	db 23, GOLBAT
-	db 23, GOLBAT
+	db 23, LARVITAR
 	; day
 	db 23, GEODUDE
 	db 23, ZUBAT
@@ -1223,7 +1223,7 @@ JohtoGrassWildMons:
 	db 25, URSARING
 	db 30, URSARING
 	db 23, GOLBAT
-	db 23, GOLBAT
+	db 23, LARVITAR
 	; nite
 	db 23, GEODUDE
 	db 23, ZUBAT
@@ -1231,7 +1231,7 @@ JohtoGrassWildMons:
 	db 20, WOBBUFFET
 	db 25, WOBBUFFET
 	db 23, GOLBAT
-	db 23, GOLBAT
+	db 23, LARVITAR
 	end_grass_wildmons
 
 	def_grass_wildmons ROUTE_29
@@ -1335,7 +1335,7 @@ JohtoGrassWildMons:
 	db 6, HOPPIP
 	db 7, PIDGEY
 	db 7, HOPPIP
-	db 7, HOPPIP
+	db 7, MAREEP
 	; nite
 	db 4, WOOPER
 	db 5, RATTATA
@@ -1558,7 +1558,7 @@ JohtoGrassWildMons:
 	db 15, RATTATA
 	db 16, RATICATE
 	db 15, ARBOK
-	db 16, FEAROW
+	db 16, FLAAFFY
 	db 16, FEAROW
 	; nite
 	db 13, RATTATA
@@ -1578,7 +1578,7 @@ JohtoGrassWildMons:
 	db 16, FARFETCH_D
 	db 15, FURRET
 	db 17, RATICATE
-	db 17, FURRET
+	db 17, GIRAFARIG
 	db 17, FURRET
 	; day
 	db 15, SENTRET
@@ -1586,14 +1586,14 @@ JohtoGrassWildMons:
 	db 16, FARFETCH_D
 	db 15, FURRET
 	db 17, RATICATE
-	db 17, FURRET
+	db 17, FLAAFFY
 	db 17, FURRET
 	; nite
 	db 15, VENONAT
 	db 16, NOCTOWL
 	db 16, RATICATE
 	db 17, VENONAT
-	db 17, RATICATE
+	db 17, GIRAFARIG
 	db 17, VENOMOTH
 	db 17, VENOMOTH
 	end_grass_wildmons

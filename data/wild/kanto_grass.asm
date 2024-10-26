@@ -346,24 +346,24 @@ KantoGrassWildMons:
 	db 18, SNUBBULL
 	db 18, RATICATE
 	db 18, JIGGLYPUFF
-	db 16, ABRA
-	db 16, ABRA
+	db 16, VULPIX
+	db 16, VULPIX
 	; day
 	db 17, RATTATA
 	db 17, SPEAROW
 	db 18, SNUBBULL
 	db 18, RATICATE
 	db 18, JIGGLYPUFF
-	db 16, ABRA
-	db 16, ABRA
+	db 16, VULPIX
+	db 16, VULPIX
 	; nite
 	db 17, MEOWTH
 	db 17, MURKROW
 	db 18, HOUNDOUR
 	db 18, PERSIAN
 	db 18, JIGGLYPUFF
-	db 16, ABRA
-	db 16, ABRA
+	db 16, VULPIX
+	db 16, VULPIX
 	end_grass_wildmons
 
 	def_grass_wildmons ROUTE_8
@@ -678,19 +678,19 @@ KantoGrassWildMons:
 	db 10 percent, 10 percent, 10 percent ; encounter rates: morn/day/nite
 	; morn
 	db 3, RATTATA
-	db 3, SPEAROW
+	db 3, MANKEY
 	db 5, SPEAROW
 	db 4, DODUO
 	db 6, PONYTA
-	db 7, FEAROW
+	db 7, MANKEY
 	db 7, FEAROW
 	; day
 	db 3, RATTATA
-	db 3, SPEAROW
+	db 3, MANKEY
 	db 5, SPEAROW
 	db 4, DODUO
 	db 6, PONYTA
-	db 7, FEAROW
+	db 7, MANKEY
 	db 7, FEAROW
 	; nite
 	db 3, RATTATA

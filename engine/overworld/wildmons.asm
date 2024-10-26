@@ -317,10 +317,10 @@ ChooseWildEncounter:
 	ld a, b
 	ld [wCurPartyLevel], a
 	ld b, [hl]
+	ld a, b ; BUGFIX for above
 	call ValidateTempWildMonSpecies
 	jr c, .nowildbattle
 
-	ld a, b
 	cp UNOWN
 	jr nz, .done
 

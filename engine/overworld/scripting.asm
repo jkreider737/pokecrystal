@@ -1241,11 +1241,13 @@ Script_memcall:
 
 ScriptCall:
 ; BUG: ScriptCall can overflow wScriptStack and crash (see docs/bugs_and_glitches.md)
-
+	ld hl, wScriptStackSize ; BUGFIX for above
+	ld a, [hl]
+	cp 5
+	ret nc
 	push de
-	ld hl, wScriptStackSize
-	ld e, [hl]
 	inc [hl]
+	ld e, a
 	ld d, 0
 	ld hl, wScriptStack
 	add hl, de
@@ -2359,3 +2361,29 @@ Script_checkver_duplicate: ; unreferenced
 
 .gs_version:
 	db GS_VERSION
+
+AppendTMHMMoveName:: ; NEW FEATURE show TM names in marts
+; a = item ID
+	ld a, [wNamedObjectIndex]
+	cp TM01
+	ret c
+; save item name buffer
+	push de
+; a = TM/HM number
+	ld c, a
+	farcall GetTMHMNumber
+	ld a, c
+; a = move ID
+	ld [wTempTMHM], a
+	predef GetTMHMMove
+	ld a, [wTempTMHM]
+; wStringBuffer1 = move name
+	ld [wNamedObjectIndex], a
+	call GetMoveName
+; hl = item name buffer
+	pop hl
+; append wStringBuffer1 to item name buffer
+	ld [hl], " "
+	inc hl
+	ld de, wStringBuffer1
+	jp CopyName2

@@ -290,7 +290,8 @@ BlackthornGymSignText:
 	done
 
 MoveDeletersHouseSignText:
-	text "MOVE DELETER'S"
+	text "MOVE DELETER and"
+	text "MOVE REMINDER'S" ; NEW FEATURE move relearner
 	line "HOUSE"
 	done
 

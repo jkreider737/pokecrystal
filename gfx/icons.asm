@@ -1,3 +1,5 @@
+SECTION "Mon Icons", ROMX ;  NEW FEATURE color party icons
+
 Icons: ; used only for BANK(Icons)
 
 NullIcon:

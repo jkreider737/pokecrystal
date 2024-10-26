@@ -36,7 +36,7 @@ BattleCommand_BeatUp:
 	ld a, [wCurBeatUpPartyMon]
 	ld c, a
 	ld a, [wCurBattleMon]
-	cp [hl]
+	cp c ; BUGFIX for above
 	ld hl, wBattleMonStatus
 	jr z, .active_mon
 	ld a, MON_STATUS
@@ -199,6 +199,9 @@ BattleCommand_BeatUpFailText:
 	ld a, [wBeatUpHitAtLeastOnce]
 	and a
 	ret nz
+
+	inc a ; BUGFIX for above
+	ld [wAttackMissed], a
 
 	jp PrintButItFailed
 

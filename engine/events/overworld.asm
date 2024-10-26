@@ -623,6 +623,8 @@ FlyFunction:
 	end
 
 .ReturnFromFly:
+	ld e, PAL_OW_RED ;  NEW FEATURE color party icons
+	farcall SetFirstOBJPalette
 	farcall RespawnPlayer
 	call DelayFrame
 	call UpdatePlayerSprite
@@ -1451,7 +1453,9 @@ FishFunction:
 	call GetFacingTileCoord
 	call GetTilePermission
 	cp WATER_TILE
-	jr z, .facingwater
+	jr nz, .fail ; BUGFIX for above
+	farcall CheckFacingObject
+	jr nc, .facingwater
 .fail
 	ld a, $3
 	ret

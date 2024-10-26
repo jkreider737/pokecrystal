@@ -104,7 +104,7 @@ _BoostedExpPointsText::
 	text_start
 	line "a boosted"
 	cont "@"
-	text_decimal wStringBuffer2, 2, 4
+	text_decimal wStringBuffer2, 2, 5 ; BUGFIX for above
 	text " EXP. Points!"
 	prompt
 
@@ -112,7 +112,7 @@ _ExpPointsText::
 ; BUG: Five-digit experience gain is printed incorrectly (see docs/bugs_and_glitches.md)
 	text_start
 	line "@"
-	text_decimal wStringBuffer2, 2, 4
+	text_decimal wStringBuffer2, 2, 5 ; BUGFIX for above
 	text " EXP. Points!"
 	prompt
 
@@ -1529,8 +1529,8 @@ _OakText1::
 	text "Hello! Sorry to"
 	line "keep you waiting!"
 
-	para "Welcome to the"
-	line "world of #MON!"
+	para "Welcome to Josh's"
+	line "Crystal remix!"
 
 	para "My name is OAK."
 

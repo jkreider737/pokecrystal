@@ -310,16 +310,14 @@ CheckPokerus:
 	farcall _CheckPokerus
 	jp ScriptReturnCarry
 
-ResetLuckyNumberShowFlag:
-	farcall RestartLuckyNumberCountdown
-	ld hl, wLuckyNumberShowFlag
-	res LUCKYNUMBERSHOW_GAME_OVER_F, [hl]
+ResetLuckyNumberShowFlag: ; NEW FEATURE reset lucky number daily
 	farcall LoadOrRegenerateLuckyIDNumber
 	ret
 
 CheckLuckyNumberShowFlag:
-	farcall _CheckLuckyNumberShowFlag
-	jp ScriptReturnCarry
+	ld hl, wLuckyNumberShowFlag ; NEW FEATURE reset lucky number daily
+	bit LUCKYNUMBERSHOW_GAME_OVER_F, [hl]
+	ret
 
 SnorlaxAwake:
 ; Check if the Poké Flute channel is playing, and if the player is standing

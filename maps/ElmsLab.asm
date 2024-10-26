@@ -90,6 +90,8 @@ ElmsLabWalkUpToElmScript:
 ProfElmScript:
 	faceplayer
 	opentext
+	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
+	iffalse ElmAskKantoOrJohto
 	checkevent EVENT_GOT_SS_TICKET_FROM_ELM
 	iftrue ElmCheckMasterBall
 	checkevent EVENT_BEAT_ELITE_FOUR
@@ -114,6 +116,23 @@ ElmCheckEverstone:
 	iftrue ShowElmTogepiScript
 	writetext ElmThoughtEggHatchedText
 	waitbutton
+	closetext
+	end
+
+ElmAskKantoOrJohto: ; CUSTOM CODE Kanto starter option
+	writetext AskKantoStarterText
+	yesorno
+	iftrue SelectedKantoStarterScript
+	iffalse SelectedJohtoStarterScript
+	end
+
+SelectedKantoStarterScript:
+	setevent EVENT_KANTO_STARTER_SELECTED
+	closetext
+	end
+
+SelectedJohtoStarterScript:
+	clearevent EVENT_KANTO_STARTER_SELECTED
 	closetext
 	end
 
@@ -159,6 +178,8 @@ LabTryToLeaveScript:
 CyndaquilPokeBallScript:
 	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
 	iftrue LookAtElmPokeBallScript
+	checkevent EVENT_KANTO_STARTER_SELECTED ; CUSTOM CODE Kanto starter option
+	iftrue .charmander
 	turnobject ELMSLAB_ELM, DOWN
 	reanchormap
 	pokepic CYNDAQUIL
@@ -185,10 +206,39 @@ CyndaquilPokeBallScript:
 	ifequal RIGHT, ElmDirectionsScript
 	applymovement PLAYER, AfterCyndaquilMovement
 	sjump ElmDirectionsScript
+.charmander ; CUSTOM CODE Kanto starter option
+	turnobject ELMSLAB_ELM, DOWN
+	reanchormap
+	pokepic CHARMANDER
+	cry CHARMANDER
+	waitbutton
+	closepokepic
+	opentext
+	writetext TakeCharmanderText
+	yesorno
+	iffalse DidntChooseStarterScript
+	disappear ELMSLAB_POKE_BALL1
+	setevent EVENT_GOT_CYNDAQUIL_FROM_ELM
+	writetext ChoseStarterText
+	promptbutton
+	waitsfx
+	getmonname STRING_BUFFER_3, CHARMANDER
+	writetext ReceivedStarterText
+	playsound SFX_CAUGHT_MON
+	waitsfx
+	promptbutton
+	givepoke CHARMANDER, 5, BERRY
+	closetext
+	readvar VAR_FACING
+	ifequal RIGHT, ElmDirectionsScript
+	applymovement PLAYER, AfterCyndaquilMovement
+	sjump ElmDirectionsScript
 
 TotodilePokeBallScript:
 	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
 	iftrue LookAtElmPokeBallScript
+	checkevent EVENT_KANTO_STARTER_SELECTED ; CUSTOM CODE Kanto starter option
+	iftrue .squirtle
 	turnobject ELMSLAB_ELM, DOWN
 	reanchormap
 	pokepic TOTODILE
@@ -213,10 +263,39 @@ TotodilePokeBallScript:
 	closetext
 	applymovement PLAYER, AfterTotodileMovement
 	sjump ElmDirectionsScript
+.squirtle ; CUSTOM CODE Kanto starter option
+	turnobject ELMSLAB_ELM, DOWN
+	reanchormap
+	pokepic SQUIRTLE
+	cry SQUIRTLE
+	waitbutton
+	closepokepic
+	opentext
+	writetext TakeSquirtleText
+	yesorno
+	iffalse DidntChooseStarterScript
+	disappear ELMSLAB_POKE_BALL1
+	setevent EVENT_GOT_TOTODILE_FROM_ELM
+	writetext ChoseStarterText
+	promptbutton
+	waitsfx
+	getmonname STRING_BUFFER_3, SQUIRTLE
+	writetext ReceivedStarterText
+	playsound SFX_CAUGHT_MON
+	waitsfx
+	promptbutton
+	givepoke SQUIRTLE, 5, BERRY
+	closetext
+	readvar VAR_FACING
+	ifequal RIGHT, ElmDirectionsScript
+	applymovement PLAYER, AfterTotodileMovement
+	sjump ElmDirectionsScript
 
 ChikoritaPokeBallScript:
 	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
 	iftrue LookAtElmPokeBallScript
+	checkevent EVENT_KANTO_STARTER_SELECTED ; CUSTOM CODE Kanto starter option
+	iftrue .bulbasaur
 	turnobject ELMSLAB_ELM, DOWN
 	reanchormap
 	pokepic CHIKORITA
@@ -239,6 +318,33 @@ ChikoritaPokeBallScript:
 	promptbutton
 	givepoke CHIKORITA, 5, BERRY
 	closetext
+	applymovement PLAYER, AfterChikoritaMovement
+	sjump ElmDirectionsScript
+.bulbasaur ; CUSTOM CODE Kanto starter option
+	turnobject ELMSLAB_ELM, DOWN
+	reanchormap
+	pokepic BULBASAUR
+	cry BULBASAUR
+	waitbutton
+	closepokepic
+	opentext
+	writetext TakeBulbasaurText
+	yesorno
+	iffalse DidntChooseStarterScript
+	disappear ELMSLAB_POKE_BALL1
+	setevent EVENT_GOT_CHIKORITA_FROM_ELM
+	writetext ChoseStarterText
+	promptbutton
+	waitsfx
+	getmonname STRING_BUFFER_3, BULBASAUR
+	writetext ReceivedStarterText
+	playsound SFX_CAUGHT_MON
+	waitsfx
+	promptbutton
+	givepoke BULBASAUR, 5, BERRY
+	closetext
+	readvar VAR_FACING
+	ifequal RIGHT, ElmDirectionsScript
 	applymovement PLAYER, AfterChikoritaMovement
 	sjump ElmDirectionsScript
 
@@ -856,9 +962,23 @@ LabWhereGoingText:
 	line "are you going?"
 	done
 
+AskKantoStarterText: ; CUSTOM CODE Kanto starter option
+	text "ELM: I have some"
+	line "new choices from"
+	
+	para "Kanto. Would you"
+	line "like one?"
+	done
+
 TakeCyndaquilText:
 	text "ELM: You'll take"
 	line "CYNDAQUIL, the"
+	cont "fire #MON?"
+	done
+
+TakeCharmanderText: ; CUSTOM CODE Kanto starter option
+	text "ELM: You'll take"
+	line "CHARMANDER, the"
 	cont "fire #MON?"
 	done
 
@@ -868,9 +988,21 @@ TakeTotodileText:
 	cont "water #MON?"
 	done
 
+TakeSquirtleText: ; CUSTOM CODE Kanto starter option
+	text "ELM: Do you want"
+	line "SQUIRTLE, the"
+	cont "water #MON?"
+	done
+
 TakeChikoritaText:
 	text "ELM: So, you like"
 	line "CHIKORITA, the"
+	cont "grass #MON?"
+	done
+
+TakeBulbasaurText: ; CUSTOM CODE Kanto starter option
+	text "ELM: So, you like"
+	line "BULBASAUR, the"
 	cont "grass #MON?"
 	done
 

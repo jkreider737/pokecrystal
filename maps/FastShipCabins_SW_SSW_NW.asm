@@ -194,8 +194,8 @@ GuitaristClydeAfterBattleText:
 	text "Speaking of the"
 	line "RADIO STATION,"
 
-	para "what's this week's"
-	line "lucky number?"
+	para "what's today's lucky" ; NEW FEATURE reset lucky number daily
+	line "number?"
 	done
 
 FastShipBedText1:

@@ -25,6 +25,8 @@ MahoganyTownFlypointCallback:
 	endcallback
 
 MahoganyTownTryARageCandyBarScript:
+	checkevent EVENT_CLEARED_ROCKET_HIDEOUT
+	iftrue end
 	showemote EMOTE_SHOCK, MAHOGANYTOWN_POKEFAN_M, 15
 	applymovement MAHOGANYTOWN_POKEFAN_M, MahoganyTownRageCandyBarMerchantBlocksYouMovement
 	follow PLAYER, MAHOGANYTOWN_POKEFAN_M

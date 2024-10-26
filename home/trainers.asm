@@ -227,17 +227,7 @@ CheckTrainerFlag:: ; unreferenced
 	pop bc
 	ret
 
-PrintWinLossText::
-	ld a, [wBattleType]
-	cp BATTLETYPE_CANLOSE
-	; code was probably dummied out here
-	jr .canlose
-
-; unused
-	ld hl, wWinTextPointer
-	jr .ok
-
-.canlose
+PrintWinLossText:: ; NEW FEATURE show lose battle text if exists
 	ld a, [wBattleResult]
 	ld hl, wWinTextPointer
 	and $f ; WIN?
