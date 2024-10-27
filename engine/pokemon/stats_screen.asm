@@ -789,12 +789,12 @@ LoadBluePage:
 	ld bc, SCREEN_WIDTH
 	add hl, bc
 	lb bc, 1, 2
-	ld de, $0000 ; hp TODO
+	ld de, $0000 ; hp TODO: will need moved to the end since it depends on calcs below, will require chaning the way we print all the values https://github.com/Grate-Oracle-Lewot/GrateCrystal/blob/master/engine/pokemon/mon_stats.asm#L124
 	call .PrintDV
 	ld a, [wTempMonDVs]
 	and $f0 ; atk
 	swap a
-	ld [wPokedexStatus], a
+	ld [wPokedexStatus], a ; We use wPokedexStatus here as another place to store 16bit values
 	ld de, wPokedexStatus
 	call .PrintDV
 	ld a, [wTempMonDVs]
