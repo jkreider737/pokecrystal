@@ -1,8 +1,9 @@
-	const_def 1
-	const PINK_PAGE  ; 1
-	const GREEN_PAGE ; 2
-	const BLUE_PAGE  ; 3
-DEF NUM_STAT_PAGES EQU const_value - 1
+	const_def ; NEW FEATURE 4th stat page
+	const PINK_PAGE   ; 0
+	const GREEN_PAGE  ; 1
+	const BLUE_PAGE   ; 2
+	const ORANGE_PAGE ; 3
+DEF NUM_STAT_PAGES EQU const_value
 
 DEF STAT_PAGE_MASK EQU %00000011
 
@@ -62,12 +63,7 @@ StatsScreenInit_gotaddress:
 StatsScreenMain:
 	xor a
 	ld [wJumptableIndex], a
-	ld [wStatsScreenFlags], a
-
-	ld a, [wStatsScreenFlags]
-	and ~STAT_PAGE_MASK
-	or PINK_PAGE ; first_page
-	ld [wStatsScreenFlags], a
+	ld [wStatsScreenFlags], a ; PINK_PAGE NEW FEATURE 4th stat page
 
 .loop
 	ld a, [wJumptableIndex]
@@ -83,12 +79,7 @@ StatsScreenMain:
 StatsScreenMobile:
 	xor a
 	ld [wJumptableIndex], a
-	ld [wStatsScreenFlags], a
-
-	ld a, [wStatsScreenFlags]
-	and ~STAT_PAGE_MASK
-	or PINK_PAGE ; first_page
-	ld [wStatsScreenFlags], a
+	ld [wStatsScreenFlags], a ; PINK_PAGE NEW FEATURE 4th stat page
 
 .loop
 	farcall Mobile_SetOverworldDelay
@@ -375,20 +366,22 @@ StatsScreen_JoypadAction:
 
 .a_button
 	ld a, c
-	cp BLUE_PAGE ; last page
+	cp ORANGE_PAGE ; last page
 	jr z, .b_button
 .d_right
 	inc c
-	ld a, BLUE_PAGE ; last page
+	ld a, ORANGE_PAGE ; last page
 	cp c
 	jr nc, .set_page
 	ld c, PINK_PAGE ; first page
 	jr .set_page
 
 .d_left
+	ld a, c
 	dec c
+	and a ; cp PINK_PAGE ; first page
 	jr nz, .set_page
-	ld c, BLUE_PAGE ; last page
+	ld c, ORANGE_PAGE ; last page
 	jr .set_page
 
 .done
@@ -509,7 +502,7 @@ StatsScreen_PlaceHorizontalDivider:
 	ret
 
 StatsScreen_PlacePageSwitchArrows:
-	hlcoord 12, 6
+	hlcoord 10, 6 ; NEW FEATURE 4th stat page
 	ld [hl], "◀"
 	hlcoord 19, 6
 	ld [hl], "▶"
@@ -565,7 +558,7 @@ StatsScreen_LoadGFX:
 .PageTilemap:
 	ld a, [wStatsScreenFlags]
 	maskbits NUM_STAT_PAGES
-	dec a
+	; NEW FEATURE 4th stat page
 	ld hl, .Jumptable
 	rst JumpTable
 	ret
@@ -576,6 +569,7 @@ StatsScreen_LoadGFX:
 	dw LoadPinkPage
 	dw LoadGreenPage
 	dw LoadBluePage
+	dw LoadOrangePage
 	assert_table_length NUM_STAT_PAGES
 
 LoadPinkPage:
@@ -766,7 +760,9 @@ LoadGreenPage:
 	db "MOVE@"
 
 LoadBluePage:
-	call .PlaceOTInfo
+	hlcoord 1, 8
+	ld bc, 2
+	call .PrintTempMonDVs
 	hlcoord 10, 8
 	ld de, SCREEN_WIDTH
 	ld b, 10
@@ -781,22 +777,155 @@ LoadBluePage:
 	predef PrintTempMonStats
 	ret
 
+.PrintTempMonDVs: ; CUSTOM CODE DVs on stat page
+	; Print wTempMon's stats at hl, with spacing bc.
+	push bc
+	push hl
+	ld de, .DVNames
+	call PlaceString
+	pop hl
+	pop bc
+	add hl, bc
+	ld bc, SCREEN_WIDTH
+	add hl, bc
+	lb bc, 1, 2
+	ld de, $0000 ; hp TODO
+	call .PrintDV
+	ld a, [wTempMonDVs]
+	and $f0 ; atk
+	swap a
+	ld [wPokedexStatus], a
+	ld de, wPokedexStatus
+	call .PrintDV
+	ld a, [wTempMonDVs]
+	and $0f ; def
+	ld [wPokedexStatus], a
+	ld de, wPokedexStatus
+	call .PrintDV
+	ld a, [wTempMonDVs + 1]
+	and $0f ; spc
+	ld [wPokedexStatus], a
+	ld de, wPokedexStatus
+	call .PrintDV
+	ld a, [wTempMonDVs + 1]
+	and $f0 ; spd
+	swap a
+	ld [wPokedexStatus], a
+	ld de, wPokedexStatus
+	call .PrintDV
+	ret
+
+.PrintDV:
+	push hl
+	call PrintNum
+	pop hl
+	ld de, SCREEN_WIDTH * 2
+	add hl, de
+	ret
+
+.DVNames:
+	db   "Hp"
+	next "Atk"
+	next "Def"
+	next "Spc"
+	next "Spd"
+	next "@"
+		
+
+LoadOrangePage: ; NEW FEATURE 4th stat page
+	call .placeCaughtLocation
+	ld de, MetAtMapString
+	hlcoord 0, 8
+	call PlaceString
+	call .placeCaughtLevel
+	call .PlaceOTInfo
+	ret
+
+.placeCaughtLocation
+	ld a, [wTempMonCaughtLocation]
+	and CAUGHT_LOCATION_MASK
+	jr z, .unknown_location
+	cp LANDMARK_EVENT
+	jr z, .unknown_location
+	cp LANDMARK_GIFT
+	jr z, .unknown_location
+	ld e, a
+	farcall GetLandmarkName
+	ld de, wStringBuffer1
+	hlcoord 1, 9
+	call PlaceString
+	ld a, [wTempMonCaughtTime]
+	and CAUGHT_TIME_MASK
+	ret z ; no time
+	rlca
+	rlca
+	dec a
+	ld hl, .times
+	call GetNthString
+	ld d, h
+	ld e, l
+	call CopyName1
+	ld de, wStringBuffer2
+	hlcoord 1, 10
+	call PlaceString
+	ret
+
+.unknown_location:
+	ld de, MetUnknownMapString
+	hlcoord 1, 9
+	call PlaceString
+	ret
+
+.times
+	db "MORN@"
+	db "DAY@"
+	db "NITE@"
+
+.placeCaughtLevel
+	; caught level
+	; Limited to between 1 and 63 since it's a 6-bit quantity.
+	ld a, [wTempMonCaughtLevel]
+	and CAUGHT_LEVEL_MASK
+	jr z, .unknown_level
+	cp CAUGHT_EGG_LEVEL ; egg marker value
+	jr nz, .print
+	ld a, EGG_LEVEL ; egg hatch level
+
+.print
+	ld [wTextDecimalByte], a
+	hlcoord 2, 12
+	ld de, wTextDecimalByte
+	lb bc, PRINTNUM_LEFTALIGN | 1, 3 ; MAYBE CHANGE?
+	call PrintNum
+	ld de, MetAtLevelString
+	hlcoord 0, 11
+	call PlaceString
+	hlcoord 1, 12
+	ld [hl], "<LV>"
+	ret
+
+.unknown_level
+	ld de, MetUnknownLevelString
+	hlcoord 1, 11
+	call PlaceString
+	ret
+
 .PlaceOTInfo:
 	ld de, IDNoString
-	hlcoord 0, 9
+	hlcoord 10, 12
 	call PlaceString
 	ld de, OTString
-	hlcoord 0, 12
+	hlcoord 10, 15
 	call PlaceString
-	hlcoord 2, 10
-	lb bc, PRINTNUM_LEADINGZEROS | 2, 5
+	hlcoord 12, 13
+	lb bc, PRINTNUM_LEADINGZEROS | 2, 5 ; MAYBE CHANGE?
 	ld de, wTempMonID
 	call PrintNum
 	ld hl, .OTNamePointers
 	call GetNicknamePointer
 	call CopyNickname
 	farcall CorrectNickErrors
-	hlcoord 2, 13
+	hlcoord 12, 16
 	call PlaceString
 	ld a, [wTempMonCaughtGender]
 	and a
@@ -808,7 +937,7 @@ LoadBluePage:
 	jr z, .got_gender
 	ld a, "♀"
 .got_gender
-	hlcoord 9, 13
+	hlcoord 19, 16
 	ld [hl], a
 .done
 	ret
@@ -818,6 +947,17 @@ LoadBluePage:
 	dw wOTPartyMonOTs
 	dw sBoxMonOTs
 	dw wBufferMonOT
+
+MetAtMapString:
+	db "MET AT:@"
+
+MetUnknownMapString:
+	db "UNKNOWN@"
+	
+MetAtLevelString:
+	db "MET LEVEL:@"    
+MetUnknownLevelString:
+	db "???@"
 
 IDNoString:
 	db "<ID>№.@"
@@ -1108,6 +1248,9 @@ StatsScreen_AnimateEgg:
 	ret
 
 StatsScreen_LoadPageIndicators:
+	hlcoord 11, 5 ; NEW FEAUTE 4th stat page
+	ld a, $36 ; " " " "
+	call .load_square
 	hlcoord 13, 5
 	ld a, $36 ; first of 4 small square tiles
 	call .load_square
@@ -1118,13 +1261,19 @@ StatsScreen_LoadPageIndicators:
 	ld a, $36 ; " " " "
 	call .load_square
 	ld a, c
+	cp PINK_PAGE ; NEW FEATURE 4th stat page
+	hlcoord 11, 5
+	jr z, .load_highlighted_square
 	cp GREEN_PAGE
+	hlcoord 13, 5
+	jr z, .load_highlighted_square
+	cp BLUE_PAGE
+	hlcoord 15, 5
+	jr z, .load_highlighted_square
+	; must be ORANGE_PAGE
+	hlcoord 17, 5
+.load_highlighted_square
 	ld a, $3a ; first of 4 large square tiles
-	hlcoord 13, 5 ; PINK_PAGE (< GREEN_PAGE)
-	jr c, .load_square
-	hlcoord 15, 5 ; GREEN_PAGE (= GREEN_PAGE)
-	jr z, .load_square
-	hlcoord 17, 5 ; BLUE_PAGE (> GREEN_PAGE)
 .load_square
 	push bc
 	ld [hli], a

@@ -375,7 +375,7 @@ LoadStatsScreenPals:
 	ret z
 	ld hl, StatsScreenPals
 	ld b, 0
-	dec c
+	; NEW FEATURE 4th stat page
 	add hl, bc
 	add hl, bc
 	ldh a, [rSVBK]
