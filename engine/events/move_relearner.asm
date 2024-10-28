@@ -94,7 +94,7 @@ MoveRelearner:
     ret
 
 .cost_to_relearn
-    dt 1000
+    dt 5000
 
 GetRelearnableMoves:
     ; Get moves relearnable by CurPartyMon
