@@ -45,11 +45,21 @@ WillScript_Battle:
 	opentext
 	checkevent EVENT_BEAT_ELITE_4_WILL
 	iftrue WillScript_AfterBattle
+	checkevent EVENT_OPENED_MT_SILVER
+	iftrue .Rematch
 	writetext WillScript_WillBeforeText
 	waitbutton
 	closetext
 	winlosstext WillScript_WillBeatenText, 0
 	loadtrainer WILL, WILL1
+	sjump .startBattle
+.Rematch
+	writetext WillScript_WillBeforeRematchText
+	waitbutton
+	closetext
+	winlosstext WillScript_WillBeatenText, 0
+	loadtrainer WILL, WILL2 ; fallthrough
+.startBattle
 	startbattle
 	reloadmapafterbattle
 	setevent EVENT_BEAT_ELITE_4_WILL
@@ -101,6 +111,17 @@ WillScript_WillBeforeText:
 
 	para "Losing is not an"
 	line "option!"
+	done
+
+WillScript_WillBeforeRematchText:
+	text "Back again already"
+	line "<PLAYER>?"
+
+	para "I have prepared"
+	line "for your return."
+
+	para "This time I will"
+	line "not be defeated!"
 	done
 
 WillScript_WillBeatenText:

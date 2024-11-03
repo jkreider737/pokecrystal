@@ -45,11 +45,21 @@ BrunoScript_Battle:
 	opentext
 	checkevent EVENT_BEAT_ELITE_4_BRUNO
 	iftrue BrunoScript_AfterBattle
+	checkevent EVENT_OPENED_MT_SILVER
+	iftrue .Rematch
 	writetext BrunoScript_BrunoBeforeText
 	waitbutton
 	closetext
 	winlosstext BrunoScript_BrunoBeatenText, 0
 	loadtrainer BRUNO, BRUNO1
+	sjump .startBattle
+.Rematch
+	writetext BrunoScript_BrunoBeforeRematchText
+	waitbutton
+	closetext
+	winlosstext BrunoScript_BrunoBeatenText, 0
+	loadtrainer BRUNO, BRUNO2 ; fallthrough
+.startBattle
 	startbattle
 	reloadmapafterbattle
 	setevent EVENT_BEAT_ELITE_4_BRUNO
@@ -104,6 +114,21 @@ BrunoScript_BrunoBeforeText:
 
 	para "to our overwhelm-"
 	line "ing power!"
+
+	para "Hoo hah!"
+	done
+
+BrunoScript_BrunoBeforeRematchText:
+	text "After our defeat,"
+	line "my #MON and I"
+	cont "trained hard."
+
+	para "Now, we are"
+	line "stronger than"
+	cont "ever!"
+
+	para "I hope you're"
+	line "ready, <PLAYER>!"
 
 	para "Hoo hah!"
 	done

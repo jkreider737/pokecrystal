@@ -45,11 +45,21 @@ KarenScript_Battle:
 	opentext
 	checkevent EVENT_BEAT_ELITE_4_KAREN
 	iftrue KarenScript_AfterBattle
+	checkevent EVENT_OPENED_MT_SILVER
+	iftrue .Rematch
 	writetext KarenScript_KarenBeforeText
 	waitbutton
 	closetext
 	winlosstext KarenScript_KarenBeatenText, 0
 	loadtrainer KAREN, KAREN1
+	sjump .startBattle
+.Rematch
+	writetext KarenScript_KarenBeforeRematchText
+	waitbutton
+	closetext
+	winlosstext KarenScript_KarenBeatenText, 0
+	loadtrainer KAREN, KAREN2 ; fallthrough
+.startBattle
 	startbattle
 	reloadmapafterbattle
 	setevent EVENT_BEAT_ELITE_4_KAREN
@@ -99,6 +109,21 @@ KarenScript_KarenBeforeText:
 	cont "entertain me."
 
 	para "Let's go."
+	done
+
+KarenScript_KarenBeforeRematchText:
+	text "I've honed my"
+	line "mastery of the"
+
+	para "dark type even"
+	line "more."
+
+	para "With the bond"
+	line "I share with my"
+	cont "#MON, there's"
+
+	para "no way we"
+	line "can lose!"
 	done
 
 KarenScript_KarenBeatenText:

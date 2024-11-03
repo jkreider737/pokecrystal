@@ -52,12 +52,23 @@ Script_ApproachLanceFromRight:
 LancesRoomLanceScript:
 	turnobject LANCESROOM_LANCE, LEFT
 	opentext
+	checkevent EVENT_OPENED_MT_SILVER
+	iftrue .Rematch
 	writetext LanceBattleIntroText
 	waitbutton
 	closetext
 	winlosstext LanceBattleWinText, 0
 	setlasttalked LANCESROOM_LANCE
 	loadtrainer CHAMPION, LANCE
+	sjump .startBattle
+.Rematch
+	writetext LanceBattleIntroRematchText
+	waitbutton
+	closetext
+	winlosstext LanceBattleWinText, 0
+	setlasttalked LANCESROOM_LANCE
+	loadtrainer CHAMPION, LANCE2 ; fallthrough
+.startBattle
 	startbattle
 	dontrestartmapmusic
 	reloadmapafterbattle
@@ -234,6 +245,18 @@ LanceBattleIntroText:
 	para "I, LANCE the drag-"
 	line "on master, accept"
 	cont "your challenge!"
+	done
+
+LanceBattleIntroRematchText:
+	text "I hear you've"
+	line "conquered all of"
+	cont "Kanto!"
+
+	para "<PLAYER>!"
+
+	para "We will once again"
+	line "battle to see who"
+	cont "is the strongest!"
 	done
 
 LanceBattleWinText:

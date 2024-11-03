@@ -45,11 +45,21 @@ KogaScript_Battle:
 	opentext
 	checkevent EVENT_BEAT_ELITE_4_KOGA
 	iftrue KogaScript_AfterBattle
+	checkevent EVENT_OPENED_MT_SILVER
+	iftrue .Rematch
 	writetext KogaScript_KogaBeforeText
 	waitbutton
 	closetext
 	winlosstext KogaScript_KogaBeatenText, 0
 	loadtrainer KOGA, KOGA1
+	sjump .startBattle
+.Rematch
+	writetext KogaScript_KogaBeforeRematchText
+	waitbutton
+	closetext
+	winlosstext KogaScript_KogaBeatenText, 0
+	loadtrainer KOGA, KOGA2 ; fallthrough
+.startBattle
 	startbattle
 	reloadmapafterbattle
 	setevent EVENT_BEAT_ELITE_4_KOGA
@@ -105,6 +115,21 @@ KogaScript_KogaBeforeText:
 
 	para "force--you shall"
 	line "see soon enough!"
+	done
+
+KogaScript_KogaBeforeRematchText:
+	text "Fwahahahaha!"
+	
+	para "I have been"
+	line "expecting your"
+	cont "return!"
+
+	para "My strategy has"
+	line "grown even more"
+	cont "formidable."
+
+	para "I shall not lose"
+	line "again!"
 	done
 
 KogaScript_KogaBeatenText:
